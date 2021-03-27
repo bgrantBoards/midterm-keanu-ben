@@ -2,6 +2,7 @@
 from bs4 import BeautifulSoup
 import pandas as pd
 import re
+import os
 # import string
 
 def get_soup(file_path):
@@ -87,7 +88,73 @@ def dataframe_from_accident_page(file_path):
     # convert the dictionary to Pandas DataFrame
     return pd.DataFrame(data=accident_data)
 
-page_path = "wget_planecrashinfo/1924/1924-4.htm"
+def get_headers(df):
+    """Returns csv formatted string of headers from Pandas dataframe df.
 
-# print(dataframe_from_accident_page(page_path))
-print(dataframe_from_accident_page(page_path))
+    Args:
+        df (Pandas DataFrame): dataframe
+    
+    Returns:
+        (string): csv formatted string of headers.
+    """
+    header_list = df.columns.values
+    return ",".join(header_list)
+
+def get_first_row(df):
+    """Returns csv formatted string of the first row from a Pandas dataframe df.
+
+    Args:
+        df (Pandas DataFrame): dataframe
+    
+    Returns:
+        (string): csv formatted string of first row's data.
+    """
+    row_list = df.iloc[0].values
+    return ",".join(row_list)
+
+def write_to_file(df, file_path):
+    """
+    Writes the information from a Pandas DataFrame to a csv data file.
+    All dataframes written to a single file must have the same number of columns
+    and column names.
+
+    If the file specified by file_path does not exist, it will be created and
+    initialized with the header row and first data row from df. All subsequent
+    writes will only write new data rows (each data row is the first row from
+    df).
+
+    Args:
+        df (Pandas DataFrame): crash dataframe
+        file_path (string): path of data file
+    """
+    with open(file_path, "a") as data_file:
+        # if file is empty, write header
+        data_file.seek(0)
+        if os.path.getsize(file_path) == 0:
+            data_file.write(get_headers(df))
+            data_file.write("\n")
+
+        # write the first row of data from df
+        data_file.write(get_first_row(df))
+        data_file.write("\n")
+
+def scrape_and_write_data(crash_page_path, data_file_path):
+    """
+    Scrapes a locally stored crash data webpage and writes the scraped table
+    data to a data file.
+
+    Args:
+        webpage_path (string): path to webpage htm file
+        data_file_path (string): path to csv data file
+    """
+    # get Pandas DataFrame for crash data
+    df = dataframe_from_accident_page(crash_page_path)
+
+    # write crash data to the data file
+    write_to_file(df, data_file_path)
+
+# page_path1 = "../wget_planecrashinfo/1986/1986-1.htm"
+# page_path2 = "../wget_planecrashinfo/1986/1986-2.htm"
+
+# scrape_and_write_data(page_path1, "patrick.csv")
+# scrape_and_write_data(page_path2, "patrick.csv")

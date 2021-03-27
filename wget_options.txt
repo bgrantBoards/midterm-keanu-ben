@@ -1,6 +1,0 @@
-wget --recursive
---level=2
---convert-links
---no-parent
-
-wget --recursive --level=2 --no-parent --convert-links http://www.planecrashinfo.com/database.htm
