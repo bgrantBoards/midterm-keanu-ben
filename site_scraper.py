@@ -52,10 +52,4 @@ def scrape_and_write_database(data_file_path):
         if "index" not in link['href']:
             scrape_and_write_year_page(year_page_path, data_file_path)
 
-
-data_path = "squidward.csv"
-year_page = "../wget_planecrashinfo/2020/2020.htm"
-
-# scrape_and_write_year_page(year_page, data_path)
-
 scrape_and_write_database("all_data.csv")

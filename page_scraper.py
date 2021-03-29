@@ -33,7 +33,7 @@ def clean_td(td):
     # row_item.text removes the tags from the entries
     dirty_text = td.text
 
-    # the following regex is to remove \xa0 and \n and comma from row_item.text
+    # the following regex is to remove \xa0 and \n and comma from td.text
     # xa0 encodes the flag, \n is the newline and comma separates thousands in
     # numbers
     clean_text = re.sub("(\xa0)|(\n)|,","", dirty_text)
@@ -153,8 +153,3 @@ def scrape_and_write_data(crash_page_path, data_file_path):
     # write crash data to the data file
     write_to_file(df, data_file_path)
 
-# page_path1 = "../wget_planecrashinfo/1986/1986-1.htm"
-# page_path2 = "../wget_planecrashinfo/1986/1986-2.htm"
-
-# scrape_and_write_data(page_path1, "patrick.csv")
-# scrape_and_write_data(page_path2, "patrick.csv")
